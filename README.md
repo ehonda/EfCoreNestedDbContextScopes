@@ -31,6 +31,6 @@ using (var innerReadContext = new MovieDbContext())
     Console.WriteLine($"documentary title in inner context is {innerDocumentary.Title}");
 }
 
-var documentary = outerContext.Movies.Single(movie => movie.Title == "Documentary");
-Console.WriteLine($"documentary title in outer context is {documentary.Title}");
+var outerDocumentary = outerContext.Movies.Single(movie => movie.Title == "Documentary");
+Console.WriteLine($"documentary title in outer context is {outerDocumentary.Title}");
 ```
