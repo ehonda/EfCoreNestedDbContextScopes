@@ -8,14 +8,22 @@ outerContext.Database.EnsureCreated();
 outerContext.Movies.Add(new("Action Movie"));
 outerContext.SaveChanges();
 
-using (var innerContext = new MovieDbContext())
+using (var innerWriteContext = new MovieDbContext())
 {
-    innerContext.Movies.Single().Title = "Documentary";
-    innerContext.SaveChanges();
+    innerWriteContext.Movies.Single().Title = "Documentary";
+    innerWriteContext.SaveChanges();
+}
+
+using (var innerReadContext = new MovieDbContext())
+{
+    var innerDocumentary = innerReadContext.Movies.Single(movie => movie.Title == "Documentary");
+    Console.WriteLine($"documentary title in inner context is {innerDocumentary.Title}");
 }
 
 var documentary = outerContext.Movies.Single(movie => movie.Title == "Documentary");
-Console.WriteLine($"{nameof(documentary)} title is {documentary.Title}");
+Console.WriteLine($"documentary title in outer context is {documentary.Title}");
+
+outerContext.Database.EnsureDeleted();
 
 class MovieDbContext : DbContext
 {
